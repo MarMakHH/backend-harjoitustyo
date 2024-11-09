@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+    <script src="\js\bootstrap.bundle.min.js"></script>
+    <title>Forums</title>
+</head>
+
+<body>
+
+
+    <header class="p-3">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+
+                <nav aria-label="breadcrumb"
+                    class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active" aria-current="page">Forums</li>
+                    </ol>
+                </nav>
+                <div sec:authorize="isAnonymous()" class="text-end">
+                    <form th:action="@{/login}" method="post" style="display: inline-block;">
+                        <input type="submit" value="Login" class="btn btn-info" />
+                    </form>
+                    <a href="/signup" class="btn btn-warning">Sign-up</a>
+                </div>
+                <div sec:authorize="isAuthenticated()" class="text-end">
+                    <div>Welcome, <span sec:authentication="name"></span></div>
+                    <form th:action="@{/logout}" method="post">
+                        <input type="submit" value="Sign Out" class="btn btn-danger" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+    <div class="container">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Category</th>
+                    <th scope="col">Topics</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="category : ${categories}">
+                    <td scope="row" class="list-group"><a class="list-group-item list-group-item-action"
+                            th:href="@{/category(id=${category.categoryid})}" th:text="${category.header}"></a></td>
+                    <td th:text="${category.topics.size()}"></td>
+                    <td sec:authorize="hasAuthority('ADMIN')">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Actions
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item"
+                                        th:href="@{/deletecategory(id=${category.categoryid})}">Delete</a></li>
+                                <li><a class="dropdown-item"
+                                        th:href="@{/editcategory(id=${category.categoryid})}">Edit</a></li>
+                                <li><a class="dropdown-item" href="#">Lock</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div sec:authorize="hasAuthority('ADMIN')">
+            <a class="btn btn-primary" href="/addcategory">Add category</a>
+        </div>
+    </div>
+
+</body>
+
+</html>

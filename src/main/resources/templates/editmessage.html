@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+    <title>Add category</title>
+</head>
+
+<body>
+    <header class="p-3">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+
+                </ul>
+
+                <div sec:authorize="isAnonymous()" class="text-end">
+                    <form th:action="@{/login}" method="post" style="display: inline-block;">
+                        <input type="submit" value="Login" class="btn btn-info" />
+                    </form>
+                    <button type="button" class="btn btn-warning">Sign-up</button>
+                </div>
+                <div sec:authorize="isAuthenticated()" class="text-end">
+                    <form th:action="@{/logout}" method="post">
+                        <input type="submit" value="Sign Out" class="btn btn-danger" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <form th:object="${message}" th:action="@{editmessage}" action="#" method="post">
+            <input type="hidden" th:field="*{messageid}">
+            <div class="form-group">
+                <label for="desc" class="form-label">Message</label>
+                <textarea id="desc" class="form-control" rows="5" th:field="*{desc}" required></textarea>
+            </div>
+            <input type="hidden" th:field="*{sender.id}">
+            <input type="hidden" th:field="*{topic.topicid}">
+            <input type="hidden" th:field="*{time}">
+            <input type="submit" class="btn btn-primary" value="Edit Message">
+            <button onclick="history.back()" class="btn btn-light">Cancel</button>
+        </form>
+    </div>
+</body>
+
+</html>
