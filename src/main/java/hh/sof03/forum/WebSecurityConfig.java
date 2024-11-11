@@ -24,9 +24,10 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/", "/index", "/signup", "/topic", "/category").permitAll()
+                .requestMatchers("/", "/index", "/signup", "/topic", "/category", "/categorylist").permitAll()
                 .requestMatchers(antMatcher("/css/**")).permitAll()
                 .requestMatchers(antMatcher("/js/**")).permitAll()
+                .requestMatchers(antMatcher("/category/**")).permitAll()
                 .requestMatchers(toH2Console()).permitAll()
                 .anyRequest().authenticated())
                 .csrf(csrf -> csrf
